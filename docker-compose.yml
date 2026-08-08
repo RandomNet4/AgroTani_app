@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # ──────────────────────────────────────
+  # DATABASE: PostgreSQL
+  # ──────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: petani-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ramariz1234
+      POSTGRES_DB: agro_petani
+    ports:
+      - "5432:5432"
+    volumes:
+      - petani_db_data:/var/lib/postgresql/data
+    networks:
+      - petani-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d agro_petani"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────
+  # BACKEND: Express.js + Prisma
+  # ──────────────────────────────────────
+  backend-app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: petani-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: postgresql://postgres:ramariz1234@db:5432/agro_petani
+      DIRECT_URL: postgresql://postgres:ramariz1234@db:5432/agro_petani
+      JWT_SECRET: gudang-fullstack-independent-super-secret-key-2026
+      JWT_EXPIRES_IN: 7d
+      FRONTEND_URL: http://localhost:80
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - petani-network
+
+  # ──────────────────────────────────────
+  # FRONTEND: React + Vite → Nginx
+  # ──────────────────────────────────────
+  frontend-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: petani-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend-app
+    networks:
+      - petani-network
+
+# ──────────────────────────────────────
+# VOLUMES
+# ──────────────────────────────────────
+volumes:
+  petani_db_data:
+    driver: local
+
+# ──────────────────────────────────────
+# NETWORKS
+# ──────────────────────────────────────
+networks:
+  petani-network:
+    driver: bridge
