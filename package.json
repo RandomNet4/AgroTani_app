@@ -1,0 +1,28 @@
+{
+  "name": "petani",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm install && npm run db:setup",
+    "db:setup": "cd backend && npx prisma generate && npx prisma db push && npm run prisma:seed",
+    "postinstall": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently --kill-others-on-fail --names \"BACKEND,FRONTEND\" --prefix-colors \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npx wait-on tcp:127.0.0.1:5000 && npm run dev --prefix frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RandomNet4/agroapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RandomNet4/agroapp/issues"
+  },
+  "homepage": "https://github.com/RandomNet4/agroapp#readme",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
