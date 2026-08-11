@@ -41,6 +41,9 @@ services:
       JWT_SECRET: gudang-fullstack-independent-super-secret-key-2026
       JWT_EXPIRES_IN: 7d
       FRONTEND_URL: http://localhost:80
+      PETANI_API_KEY: petani_secret_key_v1
+      GUDANG_URL: https://gudang-agrojabar.vercel.app
+      GUDANG_API_KEY: gudang_secret_key_v1
     ports:
       - "5000:5000"
     depends_on:
