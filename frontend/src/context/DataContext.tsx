@@ -150,8 +150,92 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
+    // ─────────────────────────────────────────────────────
+    // Initial fetch saat pertama load
+    // ─────────────────────────────────────────────────────
     refreshData();
+
+    let eventSource: EventSource | null = null;
+    let pollingInterval: ReturnType<typeof setInterval> | null = null;
+    let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+    let isUsingSSE = false;
+
+    // ─────────────────────────────────────────────────────
+    // Fungsi untuk memulai koneksi SSE
+    // ─────────────────────────────────────────────────────
+    const startSSE = () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+
+      eventSource = new EventSource('/api/events');
+
+      eventSource.addEventListener('connected', () => {
+        console.log('[SSE] ✅ Terhubung ke server real-time');
+        isUsingSSE = true;
+        // Matikan polling jika ada, karena SSE sudah aktif
+        if (pollingInterval) {
+          clearInterval(pollingInterval);
+          pollingInterval = null;
+        }
+      });
+
+      eventSource.addEventListener('data-changed', () => {
+        console.log('[SSE] 🔄 Data berubah, refresh otomatis...');
+        refreshData();
+      });
+
+      eventSource.onerror = () => {
+        console.warn('[SSE] ⚠️ Koneksi SSE terputus, beralih ke polling...');
+        isUsingSSE = false;
+
+        if (eventSource) {
+          eventSource.close();
+          eventSource = null;
+        }
+
+        // Mulai polling fallback tiap 30 detik
+        if (!pollingInterval) {
+          pollingInterval = setInterval(() => {
+            console.log('[Polling] 🔄 Refresh data...');
+            refreshData();
+          }, 30_000);
+        }
+
+        // Coba reconnect SSE setelah 10 detik
+        if (!reconnectTimeout) {
+          reconnectTimeout = setTimeout(() => {
+            reconnectTimeout = null;
+            console.log('[SSE] 🔁 Mencoba reconnect...');
+            startSSE();
+          }, 10_000);
+        }
+      };
+    };
+
+    // Mulai SSE
+    startSSE();
+
+    // ─────────────────────────────────────────────────────
+    // Cleanup saat komponen unmount
+    // ─────────────────────────────────────────────────────
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+      }
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+        reconnectTimeout = null;
+      }
+      console.log('[SSE] Koneksi ditutup (unmount)');
+    };
   }, []);
+
 
   const loginPetani = async (phone: string, password: string): Promise<boolean> => {
     try {
