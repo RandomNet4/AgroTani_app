@@ -71,24 +71,22 @@ export const parseLogbook = (catatanRaw: string | null | undefined, tanggalTanam
  * Ensures Wortel -> Wortel, Jagung -> Jagung, Buncis -> Buncis, etc.
  */
 export const getKomoditasImageMap = (namaOrGambar?: string): { url: string; emoji: string } => {
-  if (namaOrGambar && (namaOrGambar.startsWith('http://') || namaOrGambar.startsWith('https://') || namaOrGambar.startsWith('data:'))) {
-    return { url: namaOrGambar, emoji: '🌾' };
-  }
+  // Derive a searchable name string — handles both name strings and old URLs/emojis
   const name = (namaOrGambar || '').toLowerCase();
 
-  if (name.includes('wortel') || name.includes('carrot') || name === '🥕') {
+  if (name.includes('wortel') || name.includes('carrot') || name === '🥕' || name.includes('1598170845058')) {
     return {
       url: '/images/komoditas/wortel.png',
       emoji: '🥕'
     };
   }
-  if (name.includes('jagung') || name.includes('corn') || name === '🌽') {
+  if (name.includes('jagung') || name.includes('corn') || name === '🌽' || name.includes('1551754655')) {
     return {
       url: '/images/komoditas/jagung.png',
       emoji: '🌽'
     };
   }
-  if (name.includes('buncis') || name.includes('bean') || name === '🫛') {
+  if (name.includes('buncis') || name.includes('bean') || name === '🫛' || name.includes('1583091931818')) {
     return {
       url: '/images/komoditas/buncis.png',
       emoji: '🫛'
@@ -96,45 +94,48 @@ export const getKomoditasImageMap = (namaOrGambar?: string): { url: string; emoj
   }
   if (name.includes('cabai') || name.includes('cabe') || name.includes('chili') || name === '🌶️') {
     return {
-      url: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=600&q=80',
+      url: '/images/komoditas/wortel.png',
       emoji: '🌶️'
     };
   }
   if (name.includes('bawang') || name.includes('shallot') || name.includes('onion') || name === '🧅') {
     return {
-      url: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=600&q=80',
+      url: '/images/komoditas/buncis.png',
       emoji: '🧅'
     };
   }
   if (name.includes('tomat') || name.includes('tomato') || name === '🍅') {
     return {
-      url: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&q=80',
+      url: '/images/komoditas/wortel.png',
       emoji: '🍅'
     };
   }
   if (name.includes('kentang') || name.includes('potato') || name === '🥔') {
     return {
-      url: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&q=80',
+      url: '/images/komoditas/jagung.png',
       emoji: '🥔'
     };
   }
   if (name.includes('kubis') || name.includes('kol') || name.includes('cabbage') || name === '🥬') {
     return {
-      url: 'https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?w=600&q=80',
+      url: '/images/komoditas/buncis.png',
       emoji: '🥬'
     };
   }
   if (name.includes('padi') || name.includes('beras') || name === '🌾') {
     return {
-      url: 'https://images.unsplash.com/photo-1536657464919-892534f60d6e?w=600&q=80',
+      url: '/images/komoditas/jagung.png',
       emoji: '🌾'
     };
   }
 
-  // Fallback
+  // Fallback — jika ada data:... atau base64 image, biarkan apa adanya
+  if (namaOrGambar && namaOrGambar.startsWith('data:')) {
+    return { url: namaOrGambar, emoji: '🌾' };
+  }
+
   return {
     url: '/images/komoditas/wortel.png',
     emoji: '🌱'
   };
 };
-
