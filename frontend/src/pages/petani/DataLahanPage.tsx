@@ -232,8 +232,12 @@ const DataLahanPage: React.FC = () => {
                 <div className="p-4 border-b border-gray-50">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-emerald-100/50">
-                        {lahan.fotoLahan}
+                      <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-emerald-100/50 overflow-hidden shrink-0">
+                        {lahan.fotoLahan && (lahan.fotoLahan.startsWith('data:image/') || lahan.fotoLahan.startsWith('/images/') || (lahan.fotoLahan.startsWith('http') && !lahan.fotoLahan.includes('unsplash.com'))) ? (
+                          <img src={lahan.fotoLahan} alt="Foto Lahan" className="w-full h-full object-cover" />
+                        ) : (
+                          <span>{!lahan.fotoLahan || lahan.fotoLahan.includes('unsplash.com') ? (lahan.jenisLahan === 'sawah' ? '🌾' : '🥬') : lahan.fotoLahan}</span>
+                        )}
                       </div>
                       <div>
                         <h3 className="font-bold text-[15px] text-gray-800">{lahan.namaLahan}</h3>

@@ -48,7 +48,13 @@ export const DetailLahanModal: React.FC<{
       </div>
       <div className="p-5 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-3xl border border-emerald-100">{lahan.fotoLahan}</div>
+          <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-3xl border border-emerald-100 overflow-hidden shrink-0">
+            {lahan.fotoLahan && (lahan.fotoLahan.startsWith('data:image/') || lahan.fotoLahan.startsWith('/images/') || (lahan.fotoLahan.startsWith('http') && !lahan.fotoLahan.includes('unsplash.com'))) ? (
+              <img src={lahan.fotoLahan} alt="Foto Lahan" className="w-full h-full object-cover" />
+            ) : (
+              <span>{!lahan.fotoLahan || lahan.fotoLahan.includes('unsplash.com') ? (lahan.jenisLahan === 'sawah' ? '🌾' : '🥬') : lahan.fotoLahan}</span>
+            )}
+          </div>
           <div className="flex-1">
             <h4 className="font-bold text-gray-800">{lahan.namaLahan}</h4>
             <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5"><MapPin size={11} className="text-emerald-500" />{lahan.lokasi.alamat}</p>

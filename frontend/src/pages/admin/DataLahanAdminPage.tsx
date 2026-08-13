@@ -84,10 +84,10 @@ const DataLahanAdminPage: React.FC = () => {
                     <tr key={l.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          {l.fotoLahan && (l.fotoLahan.startsWith('data:image/') || l.fotoLahan.startsWith('http') || l.fotoLahan.includes('.')) ? (
+                          {l.fotoLahan && (l.fotoLahan.startsWith('data:image/') || l.fotoLahan.startsWith('/images/') || (l.fotoLahan.startsWith('http') && !l.fotoLahan.includes('unsplash.com'))) ? (
                             <img src={l.fotoLahan} alt="Foto Lahan" className="w-8 h-8 rounded-lg object-cover shrink-0 border border-gray-100" />
                           ) : (
-                            <span className="text-xl">{l.fotoLahan}</span>
+                            <span className="text-xl">{!l.fotoLahan || l.fotoLahan.includes('unsplash.com') ? '🌾' : l.fotoLahan}</span>
                           )}
                           <span className="font-medium">{l.namaLahan}</span>
                         </div>
@@ -180,10 +180,10 @@ const DataLahanAdminPage: React.FC = () => {
             <div className="bg-primary-600 p-6 text-white flex justify-between items-start">
               <div className="flex gap-4">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-4xl shadow-inner border border-white/10 overflow-hidden">
-                  {selectedLahan.fotoLahan && (selectedLahan.fotoLahan.startsWith('data:image/') || selectedLahan.fotoLahan.startsWith('http') || selectedLahan.fotoLahan.includes('.')) ? (
+                  {selectedLahan.fotoLahan && (selectedLahan.fotoLahan.startsWith('data:image/') || selectedLahan.fotoLahan.startsWith('/images/') || (selectedLahan.fotoLahan.startsWith('http') && !selectedLahan.fotoLahan.includes('unsplash.com'))) ? (
                     <img src={selectedLahan.fotoLahan} alt="Foto Lahan" className="w-full h-full object-cover" />
                   ) : (
-                    selectedLahan.fotoLahan
+                    <span>{!selectedLahan.fotoLahan || selectedLahan.fotoLahan.includes('unsplash.com') ? '🌾' : selectedLahan.fotoLahan}</span>
                   )}
                 </div>
                 <div>
