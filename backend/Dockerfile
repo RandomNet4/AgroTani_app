@@ -26,15 +26,15 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=5000
 
-# Copy file package.json untuk install dependencies
+# Copy file package.json dan prisma
 COPY package*.json ./
+COPY --from=builder /app/prisma ./prisma
 
-# Install hanya dependencies production
-RUN npm ci --only=production
+# Install hanya dependencies production tanpa re-trigger postinstall
+RUN npm ci --only=production --ignore-scripts
 
 # Copy folder hasil build dari stage builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
 # Copy generated Prisma Client agar bisa digunakan tanpa devDependencies
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
