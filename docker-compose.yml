@@ -40,7 +40,12 @@ services:
       DIRECT_URL: postgresql://postgres:ramariz1234@db:5432/agro_petani
       JWT_SECRET: gudang-fullstack-independent-super-secret-key-2026
       JWT_EXPIRES_IN: 7d
-      FRONTEND_URL: http://localhost:80
+      FRONTEND_URL: "https://agrotaniapp.my.id"
+      ECOMMERCE_API_KEY: "ecommerce-nestjs-to-gudang-express-secure-key"
+      ECOMMERCE_BACKEND_URL: "http://127.0.0.1:4000"
+      GUDANG_BACKEND_URL: "https://gudang-agrojabar.vercel.app"
+      GUDANG_API_KEY: "gudang_secret_key_v1"
+      PETANI_API_KEY: "petani_secret_key_v1"
     ports:
       - "5000:5000"
     depends_on:
@@ -50,31 +55,37 @@ services:
       - petani-network
 
   # ──────────────────────────────────────
-  # FRONTEND: React + Vite → Nginx
+  # FRONTEND: React + Vite + Nginx Reverse Proxy
   # ──────────────────────────────────────
   frontend-app:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "https://agrotaniapp.my.id/api"
     container_name: petani-frontend
     restart: unless-stopped
+    environment:
+      URL_GUDANG: "https://gudang-agrojabar.vercel.app"
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
     depends_on:
       - backend-app
     networks:
       - petani-network
 
 # ──────────────────────────────────────
-# VOLUMES
+# VOLUMES & NETWORKS
 # ──────────────────────────────────────
 volumes:
   petani_db_data:
     driver: local
 
-# ──────────────────────────────────────
-# NETWORKS
-# ──────────────────────────────────────
 networks:
   petani-network:
     driver: bridge
+
