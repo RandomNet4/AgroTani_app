@@ -4,9 +4,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
-import { Scale, Save, FileText, AlertCircle, CheckCircle2, Zap, Truck, User, RefreshCw } from 'lucide-react';
+import { CheckCircle2, Scale, AlertCircle, RefreshCw, User, Zap, Truck, Save, FileText } from 'lucide-react';
 import { formatTanggal } from '../../utils/formatters';
 import { kodeJejakPanen } from '../../utils/kode';
+import { getKomoditasImageMap } from '../../utils/cropHelpers';
 
 const QualityControlPage: React.FC = () => {
   const { 
@@ -164,9 +165,7 @@ const QualityControlPage: React.FC = () => {
                   <div>
                     {/* Header Item */}
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="text-3xl bg-amber-50 p-2 rounded-2xl border border-amber-100 shrink-0">
-                        {pickupItem.komoditasNama?.toLowerCase().includes('buncis') ? '🫛' : pickupItem.komoditasNama?.toLowerCase().includes('jagung') ? '🌽' : '🥕'}
-                      </span>
+                      <img src={getKomoditasImageMap(pickupItem.komoditasNama).url} alt={pickupItem.komoditasNama} className="w-10 h-10 rounded-2xl object-cover border border-amber-100 shrink-0" />
                       <div>
                         <h3 className="font-bold text-gray-900 text-sm">{pickupItem.komoditasNama}</h3>
                         <p className="text-[10px] text-gray-400 font-mono">Kode: {pickupItem.id}</p>
@@ -327,7 +326,12 @@ const QualityControlPage: React.FC = () => {
                     <tr key={qc.id} className="border-b border-gray-50 hover:bg-gray-50/30 transition-colors">
                       <td className="px-5 py-3.5 font-mono text-xs font-bold text-gray-500">{qc.id}</td>
                       <td className="px-5 py-3.5 font-medium text-gray-900">{qc.petaniNama}</td>
-                      <td className="px-5 py-3.5 font-semibold text-gray-800">{qc.komoditasNama}</td>
+                      <td className="px-5 py-3.5 font-semibold text-gray-800">
+                        <div className="flex items-center gap-2">
+                          <img src={getKomoditasImageMap(qc.komoditasNama).url} alt={qc.komoditasNama} className="w-6 h-6 rounded-md object-cover border border-gray-100 shrink-0" />
+                          <span>{qc.komoditasNama}</span>
+                        </div>
+                      </td>
                       <td className="px-5 py-3.5 text-right font-extrabold text-emerald-700">
                         {qc.beratDiterimaKg.toLocaleString('id-ID')} KG
                       </td>

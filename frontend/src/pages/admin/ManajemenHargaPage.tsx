@@ -7,6 +7,7 @@ import { useData } from '../../context/DataContext';
 import { DollarSign, Plus, Edit3, Clock, Save, Filter, BarChart2, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { formatRupiah, formatTanggal } from '../../utils/formatters';
 import { kodeHarga } from '../../utils/kode';
+import { getKomoditasImageMap } from '../../utils/cropHelpers';
 
 // =====================================================
 // KOMPONEN GRAFIK PERUBAHAN HARGA (SVG INTERAKTIF)
@@ -67,7 +68,7 @@ const PriceChart: React.FC<PriceChartProps> = ({ data, komoditasNama, komoditasG
       {/* Header Info Grafik */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2.5">
-          <span className="text-xl bg-emerald-50 p-1.5 rounded-xl border border-emerald-100">{komoditasGambar}</span>
+          <img src={getKomoditasImageMap(komoditasNama || komoditasGambar).url} alt={komoditasNama} className="w-8 h-8 rounded-xl object-cover border border-emerald-100 shrink-0" />
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-bold text-gray-900 text-sm">Grafik Tren Harga {komoditasNama}</h3>
@@ -271,7 +272,7 @@ const ManajemenHargaPage: React.FC = () => {
                   : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
               }`}
             >
-              <span className="text-sm">{k.gambar}</span>
+              <img src={getKomoditasImageMap(k.nama || k.gambar).url} alt={k.nama} className="w-5 h-5 rounded-md object-cover shrink-0" />
               <span>{k.nama}</span>
             </button>
           ))}
@@ -346,7 +347,7 @@ const ManajemenHargaPage: React.FC = () => {
                   <tr key={k.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
-                        <span className="text-2xl p-1 bg-gray-50 rounded-xl border border-gray-100">{k.gambar}</span>
+                        <img src={getKomoditasImageMap(k.nama || k.gambar).url} alt={k.nama} className="w-8 h-8 rounded-xl object-cover border border-gray-100 shrink-0" />
                         <div>
                           <span className="font-bold text-gray-900">{k.nama}</span>
                           <p className="text-[10px] text-gray-400 capitalize">{k.kategori}</p>
@@ -400,9 +401,9 @@ const ManajemenHargaPage: React.FC = () => {
                     const komoditas = listKomoditas.find(k => k.id === h.komoditasId);
                     return (
                       <tr key={h.id} className="border-b border-gray-50 hover:bg-gray-50/40">
-                        <td className="px-4 py-2.5 text-gray-800 font-medium">
-                          <span className="mr-1.5">{komoditas?.gambar}</span>
-                          {komoditas?.nama || 'Sayuran'}
+                        <td className="px-4 py-2.5 text-gray-800 font-medium flex items-center gap-2">
+                          <img src={getKomoditasImageMap(komoditas?.nama || komoditas?.gambar).url} alt={komoditas?.nama || ''} className="w-5 h-5 rounded-md object-cover shrink-0" />
+                          <span>{komoditas?.nama || 'Sayuran'}</span>
                         </td>
                         <td className="px-4 py-2.5 font-bold text-emerald-600">{formatRupiah(h.harga)}/kg</td>
                         <td className="px-4 py-2.5 text-gray-500 text-xs font-medium">{formatTanggal(h.tanggal)}</td>

@@ -8,6 +8,7 @@ import { ArrowLeft, Calendar, Info, CheckCircle2, Leaf, Clock } from 'lucide-rea
 import { useData } from '../../context/DataContext';
 import { formatJarakTanam } from '../../utils/spacing';
 import { kodeTanaman } from '../../utils/kode';
+import { getKomoditasImageMap } from '../../utils/cropHelpers';
 
 const FormTambahTanamanPage: React.FC = () => {
   const { lahan: listLahan, komoditas: listKomoditas, addTanaman, currentUser } = useData();
@@ -273,7 +274,7 @@ const FormTambahTanamanPage: React.FC = () => {
             {selectedKomoditas && (
               <div className="bg-emerald-50/50 rounded-xl p-3.5 border border-emerald-100 space-y-2.5">
                 <div className="flex gap-3">
-                  <span className="text-2xl">{selectedKomoditas.gambar}</span>
+                  <img src={getKomoditasImageMap(selectedKomoditas.nama || selectedKomoditas.gambar).url} alt={selectedKomoditas.nama} className="w-9 h-9 rounded-lg object-cover border border-emerald-200 shrink-0" />
                   <div>
                     <p className="text-xs font-bold text-emerald-800">{selectedKomoditas.nama}</p>
                     <p className="text-[10px] text-emerald-600 mt-0.5">{selectedKomoditas.deskripsi}</p>

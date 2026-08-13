@@ -157,8 +157,8 @@ const MonitoringSupplyPage: React.FC = () => {
               <p className="text-amber-100 text-xs font-semibold uppercase tracking-wider">Terbanyak ({now.toLocaleDateString('id-ID', {month:'short'})})</p>
               <Sprout size={16} className="text-amber-100" />
             </div>
-            <p className="text-lg font-bold truncate flex items-center gap-1.5">
-              <span className="shrink-0">{terpopuler.gambar}</span>
+            <p className="text-lg font-bold truncate flex items-center gap-2">
+              <img src={getKomoditasImageMap(terpopuler.nama || terpopuler.gambar).url} alt={terpopuler.nama} className="w-6 h-6 rounded-md object-cover shrink-0 border border-white/20" />
               <span className="truncate">{terpopuler.nama}</span>
             </p>
           </div>

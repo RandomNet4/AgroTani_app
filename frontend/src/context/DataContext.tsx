@@ -158,8 +158,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let eventSource: EventSource | null = null;
     let pollingInterval: ReturnType<typeof setInterval> | null = null;
     let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
-    let isUsingSSE = false;
-
     // ─────────────────────────────────────────────────────
     // Fungsi untuk memulai koneksi SSE
     // ─────────────────────────────────────────────────────
@@ -172,7 +170,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       eventSource.addEventListener('connected', () => {
         console.log('[SSE] ✅ Terhubung ke server real-time');
-        isUsingSSE = true;
         // Matikan polling jika ada, karena SSE sudah aktif
         if (pollingInterval) {
           clearInterval(pollingInterval);
@@ -187,7 +184,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       eventSource.onerror = () => {
         console.warn('[SSE] ⚠️ Koneksi SSE terputus, beralih ke polling...');
-        isUsingSSE = false;
 
         if (eventSource) {
           eventSource.close();

@@ -8,7 +8,7 @@ import { Sprout, Check, X, Eye, Camera, User, MapPin, Calendar, Info, Scale, Ale
 import StatusBadge from '../../components/StatusBadge';
 import { formatTanggal } from '../../utils/formatters';
 import { formatJarakTanam } from '../../utils/spacing';
-import { hitungProgressTanaman } from '../../utils/cropHelpers';
+import { hitungProgressTanaman, getKomoditasImageMap } from '../../utils/cropHelpers';
 
 const VerifikasiTanamanPage: React.FC = () => {
   const { tanamanAktif: listTanamanAktif, petani: listPetani, lahan: listLahan, inspectTanaman } = useData();
@@ -101,7 +101,7 @@ const VerifikasiTanamanPage: React.FC = () => {
                   <tr key={t.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-xl">{t.fotoTanaman}</span>
+                        <img src={getKomoditasImageMap(t.komoditasNama || t.fotoTanaman).url} alt={t.komoditasNama} className="w-6 h-6 rounded-md object-cover border border-gray-100 shrink-0" />
                         <span className="font-medium">{t.komoditasNama}</span>
                       </div>
                     </td>
@@ -185,9 +185,7 @@ const VerifikasiTanamanPage: React.FC = () => {
           <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl transition-all" onClick={e => e.stopPropagation()}>
             <div className="bg-emerald-600 p-6 text-white flex justify-between items-start">
               <div className="flex gap-4">
-                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-4xl shadow-inner border border-white/10">
-                  {detail.fotoTanaman}
-                </div>
+                <img src={getKomoditasImageMap(detail.komoditasNama || detail.fotoTanaman).url} alt={detail.komoditasNama} className="w-16 h-16 rounded-2xl object-cover border border-white/20 shadow-md shrink-0 bg-white" />
                 <div>
                   <h2 className="font-display font-bold text-2xl">{detail.komoditasNama}</h2>
                   <p className="text-emerald-100 text-sm flex items-center gap-1 opacity-80 mt-1">
