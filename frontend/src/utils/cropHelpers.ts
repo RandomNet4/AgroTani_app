@@ -78,19 +78,19 @@ export const getKomoditasImageMap = (namaOrGambar?: string): { url: string; emoj
 
   if (name.includes('wortel') || name.includes('carrot') || name === '🥕') {
     return {
-      url: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600&q=80',
+      url: '/images/komoditas/wortel.png',
       emoji: '🥕'
     };
   }
   if (name.includes('jagung') || name.includes('corn') || name === '🌽') {
     return {
-      url: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&q=80',
+      url: '/images/komoditas/jagung.png',
       emoji: '🌽'
     };
   }
   if (name.includes('buncis') || name.includes('bean') || name === '🫛') {
     return {
-      url: 'https://images.unsplash.com/photo-1583091931818-406c7e289ec0?w=600&q=80',
+      url: '/images/komoditas/buncis.png',
       emoji: '🫛'
     };
   }
@@ -133,7 +133,7 @@ export const getKomoditasImageMap = (namaOrGambar?: string): { url: string; emoj
 
   // Fallback
   return {
-    url: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600&q=80',
+    url: '/images/komoditas/wortel.png',
     emoji: '🌱'
   };
 };

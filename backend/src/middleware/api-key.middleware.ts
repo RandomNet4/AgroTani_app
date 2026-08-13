@@ -2,13 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 
 export const apiKeyMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const apiKey = req.headers['x-api-key'];
-  const validKeys = [
-    process.env.PETANI_API_KEY,
-    'petani_secret_key_v1',
-    'gudang_secret_key_v1',
-  ].filter(Boolean);
+  const validApiKey = process.env.PETANI_API_KEY || 'gudang_secret_key_v1';
 
-  if (!apiKey || !validKeys.includes(apiKey as string)) {
+  if (!apiKey || apiKey !== validApiKey) {
     return res.status(401).json({
       success: false,
       error: 'Unauthorized: Invalid or missing API key',
